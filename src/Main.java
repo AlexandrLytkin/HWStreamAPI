@@ -1,30 +1,65 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
-//        task1();
-//        task1Stream1();
-        task1Stream2();
-        List<User> userList = List.of(
-                new User("Ivan", 21),
-                new User("Ilya", 17),
-                new User("Alex", 46),
-                new User("Max", 23));
-//        System.out.println("task2(allIs18age) = " + task2(userList));
-        System.out.println("task2Stream(allIs18age) = " + task2Stream(userList));
-        int[] value = {5, 4, 7, 9, 11, 7, 54, 1, 3, 2, 7};
-//        System.out.println("task3(value) = " + Arrays.toString(task3(value)));
-        System.out.println("task3Stream(value) = " + Arrays.toString(task3Stream(value)));
-//        System.out.println("task4(averageAge) = " + task4(userList));
-        System.out.println("task4Stream(averageAge) = " + task4Stream(userList));
-//        System.out.println("task4Stream(averageAge) = " + task4Stream(List.of()));
+//        System.out.println("Hello world!");
+////        task1();
+////        task1Stream1();
+//        task1Stream2();
+//        List<User> userList = List.of(
+//                new User("Ivan", 21),
+//                new User("Ilya", 17),
+//                new User("Alex", 46),
+//                new User("Max", 23));
+////        System.out.println("task2(allIs18age) = " + task2(userList));
+//        System.out.println("task2Stream(allIs18age) = " + task2Stream(userList));
+//        int[] value = {5, 4, 7, 9, 11, 7, 54, 1, 3, 2, 7};
+////        System.out.println("task3(value) = " + Arrays.toString(task3(value)));
+//        System.out.println("task3Stream(value) = " + Arrays.toString(task3Stream(value)));
+////        System.out.println("task4(averageAge) = " + task4(userList));
+//        System.out.println("task4Stream(averageAge) = " + task4Stream(userList));
+////        System.out.println("task4Stream(averageAge) = " + task4Stream(List.of()));
+
+        Stream<Integer> stream = new ArrayList<>(Arrays.asList(7, 4, 12, 21, 1, 9, 54)).stream();
+        findMinMax(
+                stream,
+                (min, max) -> min.compareTo(max),
+                (min, max) -> System.out.println(String.format("min: %s, max: %s", min, max))
+        );
+        stream.close();
+
+        ArrayList<Integer> arrayList = new ArrayList<Integer>();
+        int number;
+        Random rnd = new Random();
+        for (int i = 0; i < 10; i++) {
+            number = rnd.nextInt() % 100;
+            arrayList.add(number);
+        }
+        System.out.println("arrayList = " + arrayList);
+        findEvenNumberFromList(arrayList);
+    }
+
+    public static <T> void findMinMax(
+            Stream<? extends T> stream,
+            Comparator<? super T> order,
+            BiConsumer<? super T, ? super T> minMaxConsumer) {
+        List<T> items = stream.sorted(order).collect(Collectors.toList());
+        if (!items.isEmpty()) {
+            minMaxConsumer.accept(items.get(0), items.get(items.size() - 1));
+        } else {
+            minMaxConsumer.accept(null, null);
+        }
+    }
+
+    public static void findEvenNumberFromList(ArrayList<Integer> arrayList) {
+        int num = (int) (arrayList.stream()
+                .filter((n) -> (n % 2) == 0))
+                .count();
+        System.out.println("even number from arrayList = " + num);
     }
 
     private static void task1() {
